@@ -15,3 +15,5 @@ COLCON_IGNORE
 .catkin_tools
 core
 /tmp
+*.db3
+fixposition_bag*/
