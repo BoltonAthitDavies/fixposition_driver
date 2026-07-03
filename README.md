@@ -70,6 +70,124 @@ nc <sensor-ip> 21000
 
 Not a launch method — just a quick sanity check. If you see `$FP,...` lines streaming, the sensor is reachable and outputting data. Useful before launching the driver for the first time or when debugging connection issues.
 
+## Coordinate System
+
+The driver uses **ECEF** (Earth-Centered, Earth-Fixed) as the global frame — not a base station.
+
+### Frames
+
+| Frame | Description |
+|---|---|
+| `FP_ECEF` | Global ECEF frame (absolute position on Earth). Tree root |
+| `FP_ENU0` | Local East-North-Up tangent plane at a fixed origin point. Static relative to `FP_ECEF` |
+| `FP_POI` | Point of Interest — the vehicle reference point at the configured output location |
+| `FP_POISH` | Smoothed POI — same as `FP_POI` but without position jumps |
+| `FP_VRTK` | Vision-RTK sensor body frame. Also the frame of the raw/corrected IMU and bias topics |
+| `FP_CAM` | Camera frame (fixed extrinsic from `FP_VRTK`) |
+| `FP_IMUH` | IMU level (horizontal) frame relative to `FP_POI`. Roll/pitch only; yaw is zeroed |
+| `GNSS1` / `GNSS2` | Primary / secondary GNSS antenna positions |
+
+### TF Tree
+
+```
+FP_ECEF                                       (tree root)
+├── FP_ENU0        (static,  FP_A-TF ECEF→ENU0)
+└── FP_POI         (dynamic, FP_A-ODOMETRY)
+    ├── FP_IMUH    (dynamic, FP_A-TF POI→IMUH)
+    ├── FP_POISH   (dynamic, FP_A-TF POI→POISH)
+    └── FP_VRTK    (static,  FP_A-TF POI→VRTK)
+        └── FP_CAM (static,  FP_A-TF VRTK→CAM)
+```
+
+Notes:
+
+- `FP_POI` has a single parent (`FP_ECEF`); its pose in `FP_ENU0` is obtained by
+  chaining through `FP_ECEF`. There is **no** direct `FP_ENU0 → FP_POI` transform
+  in default mode — `/odometry_enu` is published as a *topic*, not a TF.
+- Which TF edges appear depends on the messages enabled on the sensor's TCP0
+  output: `FP_A-TF_ECEFENU0`, `POIVRTK`, `VRTKCAM`, `POIIMUH`, `POIPOISH`.
+- All TF edges require an initialized fusion engine; before that the driver logs
+  "Is the fusion engine initialized?" and skips them.
+
+With `nav2_mode: true`, the driver instead publishes the standard ROS2 Navigation2
+convention (the `FP_A-ODOMENU`/`ODOMSH` transforms are used here):
+
+```
+FP_ECEF → FP_ENU0 → map (static identity)
+                      └── odom
+                            └── vrtk_link
+```
+
+## Published Topics
+
+All topics are under the `/fixposition` namespace by default (`output_ns` in config).
+
+### Odometry (~10 Hz, from fusion)
+
+| Topic | Type | Frame | Description |
+|---|---|---|---|
+| `/odometry_ecef` | `nav_msgs/Odometry` | `FP_ECEF` → `FP_POI` | Absolute ECEF position + velocity |
+| `/odometry_enu` | `nav_msgs/Odometry` | `FP_ENU0` → `FP_POI` | Local ENU position + velocity |
+| `/odometry_llh` | `sensor_msgs/NavSatFix` | `FP_POI` | Lat/Lon/Height (converted from ECEF) |
+| `/odometry_smooth` | `nav_msgs/Odometry` | `FP_ECEF` → `FP_POISH` | Smooth ECEF (no jumps) |
+| `/odometry_enu_smooth` | `nav_msgs/Odometry` | `FP_ENU0` → `FP_POISH` | Smooth ENU (no jumps) |
+| `/ypr` | `geometry_msgs/Vector3Stamped` | `FP_ENU0` | Yaw / Pitch / Roll in ENU |
+
+### IMU
+
+| Topic | Type | Rate | Frame | Description |
+|---|---|---|---|---|
+| `/poiimu` | `sensor_msgs/Imu` | ~10 Hz | `FP_ECEF` | Accel + angular vel at POI (from fusion). No orientation — use odometry topics for that |
+| `/imu_ypr` | `geometry_msgs/Vector3Stamped` | ~10 Hz | `FP_POI` | Pitch/Roll from IMU only (yaw is zeroed) |
+| `/fpa/rawimu` | `fpmsgs/FpaImu` | ~200 Hz | `FP_VRTK` | Raw accelerometer + gyroscope |
+| `/fpa/corrimu` | `fpmsgs/FpaImu` | ~200 Hz | `FP_VRTK` | Bias-corrected accelerometer + gyroscope |
+| `/fpa/imubias` | `fpmsgs/FpaImubias` | ~10 Hz | `FP_VRTK` | Estimated accel + gyro biases |
+
+### GNSS
+
+| Topic | Type | Description |
+|---|---|---|
+| `/gnss1` | `sensor_msgs/NavSatFix` | Primary GNSS antenna position |
+| `/gnss2` | `sensor_msgs/NavSatFix` | Secondary GNSS antenna position |
+| `/fpa/llh` | `fpmsgs/FpaLlh` | Lat/Lon/Height with ENU covariance |
+| `/fpa/gnssant` | `fpmsgs/FpaGnssant` | Antenna state / power / age |
+| `/fpa/gnsscorr` | `fpmsgs/FpaGnsscorr` | Correction data status (fix type, base station info) |
+
+### Status & Epoch
+
+| Topic | Type | Description |
+|---|---|---|
+| `/fpa/odometry` | `fpmsgs/FpaOdometry` | Full fusion odometry with status flags |
+| `/fpa/odomenu` | `fpmsgs/FpaOdomenu` | Full ENU odometry with status flags |
+| `/fpa/odomsh` | `fpmsgs/FpaOdomsh` | Full smooth odometry with status flags |
+| `/fpa/odomstatus` | `fpmsgs/FpaOdomstatus` | Fusion status (IMU, GNSS, camera, wheelspeed) |
+| `/fpa/eoe` | `fpmsgs/FpaEoe` | End-of-epoch marker |
+| `/fpa/text` | `fpmsgs/FpaText` | Sensor text messages (errors, warnings, info) |
+| `/fpa/tp` | `fpmsgs/FpaTp` | Time pulse info (GPS week, leap seconds) |
+| `/fusion` | `fpmsgs/FusionEpoch` | Bundled fusion epoch (odometry + status + bias) |
+
+### NMEA
+
+| Topic | Type | Description |
+|---|---|---|
+| `/nmea/gga` | `fpmsgs/NmeaGga` | Fix data (position, quality, HDOP) |
+| `/nmea/gll` | `fpmsgs/NmeaGll` | Position (lat/lon) |
+| `/nmea/gsa` | `fpmsgs/NmeaGsa` | DOP and active satellites |
+| `/nmea/gst` | `fpmsgs/NmeaGst` | Pseudorange error statistics |
+| `/nmea/gsv` | `fpmsgs/NmeaGsv` | Satellites in view |
+| `/nmea/hdt` | `fpmsgs/NmeaHdt` | True heading |
+| `/nmea/rmc` | `fpmsgs/NmeaRmc` | Recommended minimum (date, time, speed, course) |
+| `/nmea/vtg` | `fpmsgs/NmeaVtg` | Course/speed over ground |
+| `/nmea/zda` | `fpmsgs/NmeaZda` | Date and time |
+| `/nmea` | `fpmsgs/NmeaEpoch` | Bundled NMEA epoch |
+
+### Subscribed Topics (input)
+
+| Topic | Type | Description |
+|---|---|---|
+| `/rtcm` | `rtcm_msgs/Message` | RTCM correction data |
+| `/fixposition/speed` | `fpmsgs/Speed` | Wheelspeed input |
+
 ## Subscribing to Topics
 
 The driver publishes with **BEST_EFFORT** reliability and **VOLATILE** durability (`qos_type: sensor_short`). When using `ros2 topic echo`, you must match this QoS:
@@ -84,13 +202,6 @@ Custom message types require sourcing the workspace first:
 source install/setup.bash
 ros2 topic echo /fixposition/fpa/odometry --qos-reliability best_effort
 ```
-
-## Topic Rates
-
-| Topics | Rate | Source |
-|---|---|---|
-| `/fixposition/odometry_*`, `/fixposition/ypr`, `/fixposition/poiimu` | ~10 Hz | Fusion output (configurable in sensor web UI) |
-| `/fixposition/fpa/rawimu`, `/fixposition/fpa/corrimu` | ~200 Hz | Raw IMU data |
 
 ## Visualisation
 
