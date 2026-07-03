@@ -1,6 +1,7 @@
-build
+build/
 devel
-log
+install/
+log/
 doc_gen/*
 */doc_gen/*
 /.vscode*

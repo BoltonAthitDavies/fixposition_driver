@@ -1,0 +1,86 @@
+# Ignore ROS1 package and examples you don't need
+touch fixposition-sdk/fpsdk_ros1/COLCON_IGNORE
+touch fixposition-sdk/examples/COLCON_IGNORE   # or just specific ones
+
+# Build
+cd ~/fixposition_driver
+source /opt/ros/humble/setup.bash
+colcon build --packages-select fpsdk_common fpsdk_ros2
+or
+colcon build --packages-select fpsdk_common fpsdk_ros2 --cmake-args -DBUILD_TESTING=OFF
+
+# ros2 run
+source /opt/ros/humble/setup.bash
+source install/setup.bash
+ros2 launch fixposition_driver_ros2 node.launch
+
+# BEST: auto-resolve the sensor's IP (survives DHCP/network changes) and launch.
+# The sensor's mDNS name (fp-0e47c8.local) is fixed; only its IP changes.
+./run_driver.sh
+# (the SDK needs a numeric IP, so the script resolves the name -> current IP,
+#  writes ~/.config/fixposition/config.yaml, and launches with it)
+
+# tcp-ip output
+nc 10.0.2.1 21000
+
+# plot graph
+ros2 run plotjuggler plotjuggler
+
+# rviz
+rviz2 -d ~/fixposition_driver/fixposition.rviz
+
+# export wifi port
+export ROS_DISCOVERY_SERVER=192.168.0.146:11811
+
+# record rosbag
+ros2 bag record -o fixposition_bag_02   /tf /tf_static   /fixposition/fpa/corrimu /fixposition/fpa/eoe /fixposition/fpa/gnssant   /fixposition/fpa/gnsscorr /fixposition/fpa/imubias /fixposition/fpa/llh   /fixposition/fpa/odomenu /fixposition/fpa/odometry /fixposition/fpa/odomsh   /fixposition/fpa/odomstatus /fixposition/fpa/rawimu /fixposition/fpa/text   /fixposition/fpa/tp /fixposition/fusion /fixposition/gnss1 /fixposition/gnss2   /fixposition/imu_ypr /fixposition/nmea /fixposition/nmea/gga /fixposition/nmea/gll   /fixposition/nmea/gsa /fixposition/nmea/gst /fixposition/nmea/gsv /fixposition/nmea/hdt   /fixposition/nmea/rmc /fixposition/nmea/vtg /fixposition/nmea/zda   /fixposition/novb/inspvax /fixposition/odometry_ecef /fixposition/odometry_enu   /fixposition/odometry_enu_smooth /fixposition/odometry_llh /fixposition/odometry_smooth   /fixposition/poiimu /fixposition/speed /fixposition/ypr /rtcm
+
+
+
+<------------------------ Network command ------------------------>
+# ip connection list
+ip a
+
+# check ip connection
+ping 192.168.1.34 (ethernet)
+and
+ping 192.168.1.35 (wifi)
+
+
+<------------------------ SENSOR CONNECTION TROUBLESHOOTING ------------------------>
+# KEY IDEA: the sensor's IP is DHCP, so it CHANGES whenever the network changes.
+#   Symptom in the driver log: "Network is unreachable (101, ENETUNREACH)" then "Ouch!"
+#   Cause: stream: line in config.yaml points at the sensor's OLD ip.
+#   NOTE: 192.168.1.34 / .35 are just THIS LAPTOP (ethernet / wifi), NOT the sensor.
+#   NOTE: the wifi you use for the internet is NOT the sensor network unless the
+#         sensor is on the same wifi. You can't reach the sensor from a different subnet.
+
+# STEP 1 - which subnet am I on? (note the first 3 octets, e.g. 10.147.182)
+ip -4 addr show wlo1 | grep inet
+
+# STEP 2 - find the sensor: scan that subnet for the FP data port 21000
+#   (replace 10.147.182 with your subnet from step 1)
+for h in $(seq 1 254); do (timeout 1 bash -c "echo > /dev/tcp/10.147.182.$h/21000" 2>/dev/null && echo "SENSOR at 10.147.182.$h") & done; wait
+
+# STEP 3 - confirm it streams FP data (Ctrl-C after you see $FP,... lines)
+nc <sensor-ip> 21000
+
+# STEP 4 - set that ip in the stream: line of BOTH files (source + installed copy):
+#   fixposition_driver_ros2/launch/config.yaml
+#   install/fixposition_driver_ros2/share/fixposition_driver_ros2/launch/config.yaml
+#   e.g.  stream: tcpcli://<sensor-ip>:21000
+
+# STEP 5 - launch
+ros2 launch fixposition_driver_ros2 node.launch
+
+# PERMANENT FIX: give the sensor a static / DHCP-reserved IP (sensor web UI or
+# router) so the stream: line never has to change again.
+
+<------------------------ ros2 topics disappear after changing wifi ------------------------>
+# 1) restart the daemon (it caches stale discovery after a network change):
+ros2 daemon stop && ros2 daemon start && ros2 topic list
+# 2) FASTRTPS_DEFAULT_PROFILES_FILE with an interfaceWhiteList is now DISABLED in
+#    ~/.bashrc (it hardcoded the laptop ip and broke discovery on every network).
+#    If it ever comes back, just: unset FASTRTPS_DEFAULT_PROFILES_FILE
+
+#
