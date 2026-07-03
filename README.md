@@ -26,15 +26,17 @@ colcon build --packages-select fpsdk_common fpsdk_ros2 --cmake-args -DBUILD_TEST
 colcon build --cmake-args -DBUILD_TESTING=OFF
 ```
 
-## Quick Start
+## Launching the Driver
 
-The easiest way to launch is with `run_driver.sh`, which auto-discovers the sensor:
+There are several ways to launch the driver. Pick whichever fits your setup.
+
+### Option 1: Auto-discovery script (recommended)
 
 ```bash
 ./run_driver.sh
 ```
 
-It tries WiFi first (resolving the sensor's mDNS name `fp-0e47c8.local`) then falls back to Ethernet (`10.0.1.1`). The script resolves the current IP, writes a runtime config to `~/.config/fixposition/config.yaml`, and launches the driver.
+Best for day-to-day use. The script automatically finds the sensor on the network — it tries WiFi first (resolving the mDNS name `fp-0e47c8.local`) then falls back to Ethernet (`10.0.1.1`). It writes a runtime config to `~/.config/fixposition/config.yaml` with the resolved IP and launches the driver. No manual IP editing needed.
 
 Environment variable overrides:
 
@@ -44,7 +46,7 @@ Environment variable overrides:
 | `FP_SENSOR_ETH_IP` | `10.0.1.1` | Sensor static IP (Ethernet fallback) |
 | `FP_SENSOR_PORT` | `21000` | Sensor TCP data port |
 
-### Manual Launch
+### Option 2: Direct ROS2 launch
 
 ```bash
 source /opt/ros/humble/setup.bash
@@ -52,11 +54,21 @@ source install/setup.bash
 ros2 launch fixposition_driver_ros2 node.launch
 ```
 
-Edit the `stream:` line in [fixposition_driver_ros2/launch/config.yaml](fixposition_driver_ros2/launch/config.yaml) to point to your sensor's IP:
+Uses the config at [fixposition_driver_ros2/launch/config.yaml](fixposition_driver_ros2/launch/config.yaml). You need to set the sensor IP manually in the `stream:` line:
 
 ```yaml
 stream: tcpcli://<sensor-ip>:21000
 ```
+
+Use this when you know the sensor's IP won't change (e.g. static IP or DHCP reservation).
+
+### Option 3: Verify raw data first (no ROS)
+
+```bash
+nc <sensor-ip> 21000
+```
+
+Not a launch method — just a quick sanity check. If you see `$FP,...` lines streaming, the sensor is reachable and outputting data. Useful before launching the driver for the first time or when debugging connection issues.
 
 ## Subscribing to Topics
 
