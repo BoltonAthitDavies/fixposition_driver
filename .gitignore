@@ -10,10 +10,26 @@ COLCON_IGNORE
 /ros1_ws
 /ros2_ws
 /ws
-/ros1_ws
 /ros
 .catkin_tools
 core
 /tmp
 *.db3
 fixposition_bag*/
+
+# ROS1 (not used — ROS2 only)
+fixposition_driver_ros1/
+fixposition-sdk/fpsdk_ros1/
+fixposition-sdk/examples/
+
+# Upstream build/release scripts (not used)
+create_ros_ws.sh
+setup_ros_ws.sh
+update_versions.sh
+precommit.sh
+
+# Analysis scripts (not needed to run the driver)
+analysis/
+
+# Large files
+*.pdf
