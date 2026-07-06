@@ -12,6 +12,8 @@ Forked from [fixposition/fixposition\_driver](https://github.com/fixposition/fix
 - Ubuntu 22.04 + ROS 2 Humble
 - Fixposition Vision-RTK 2 sensor reachable on the network (WiFi or Ethernet)
 - Sensor TCP0 port (21000) configured with the required output messages via the sensor web UI
+- *(Optional, for the camera stream)* GStreamer H.264 decoder plugins:
+  `sudo apt install gstreamer1.0-libav gstreamer1.0-plugins-bad`
 
 ## Build
 
@@ -181,6 +183,38 @@ All topics are under the `/fixposition` namespace by default (`output_ns` in con
 | `/nmea/zda` | `fpmsgs/NmeaZda` | Date and time |
 | `/nmea` | `fpmsgs/NmeaEpoch` | Bundled NMEA epoch |
 
+### Camera (optional, disabled by default)
+
+The sensor's camera video is streamed as H.264/RTP over UDP — a **separate path** from the TCP data stream — and republished as ROS2 image topics.
+
+| Topic | Type | Frame | Description |
+|---|---|---|---|
+| `/camera/image_raw` | `sensor_msgs/Image` | `FP_CAM` | Decoded frames (`bgr8`, 640×400, ~12 Hz) |
+| `/camera/image_raw/compressed` | `sensor_msgs/CompressedImage` | `FP_CAM` | JPEG-encoded frames |
+
+**To enable it:**
+
+1. Install the H.264 decoder plugins (see [Prerequisites](#prerequisites)).
+2. Configure the sensor to stream the camera to **this host**: web UI → *Configuration → Camera → Stream*: set *Enable*, *Encoding* `H.264`, *Method* `Unicast`, *Destination* `<this-host-ip>:5004`. (Config is locked while Fusion is running — stop Fusion to change it.)
+3. Set `camera.enabled: true` in [config.yaml](fixposition_driver_ros2/launch/config.yaml) and launch the driver.
+
+```bash
+ros2 run rqt_image_view rqt_image_view      # select either camera topic
+ros2 topic hz /fixposition/camera/image_raw
+```
+
+Camera settings in `config.yaml`:
+
+| Param | Default | Description |
+|---|---|---|
+| `camera.enabled` | `false` | Publish the camera image topics |
+| `camera.port` | `5004` | UDP port the sensor unicasts the H.264 stream to |
+| `camera.frame_id` | `FP_CAM` | `frame_id` stamped on published images |
+| `camera.pipeline` | `""` | Optional full GStreamer pipeline override (empty = built from port) |
+
+> [!NOTE]
+> The capture runs in a background thread and reconnects automatically (using `reconnect_delay`). The JPEG encode is skipped when no one subscribes to the compressed topic. Frames only publish while the driver is running.
+
 ### Subscribed Topics (input)
 
 | Topic | Type | Description |
@@ -229,6 +263,9 @@ ros2 bag record -o fixposition_bag \
   /fixposition/poiimu /fixposition/speed /fixposition/ypr /rtcm
 ```
 
+The camera topics are omitted above (they are large). To include video, add
+`/fixposition/camera/image_raw/compressed` (JPEG — much smaller than raw).
+
 ## Troubleshooting
 
 ### Sensor IP changed (ENETUNREACH)
@@ -269,6 +306,22 @@ If `FASTRTPS_DEFAULT_PROFILES_FILE` is set in your shell, unset it — an interf
 1. Check the sensor web UI I/O config — the required messages must be enabled on TCP0
 2. Verify with `nc <sensor-ip> 21000` that you see `$FP,...` lines
 3. Make sure you use `--qos-reliability best_effort` when echoing
+
+### No camera image
+
+The driver log tells you which stage failed:
+
+- `Camera: could not open GStreamer pipeline` → the H.264 decoder is missing.
+  Install it: `sudo apt install gstreamer1.0-libav gstreamer1.0-plugins-bad`
+  (verify with `gst-inspect-1.0 avdec_h264`).
+- `Camera: failed to read frame, reconnecting` → the pipeline opened but no packets
+  arrive. The sensor must **unicast** the stream to this host's IP (see
+  [Camera setup](#camera-optional-disabled-by-default)). Note the host IP is DHCP-assigned
+  and can change on reboot — update the sensor's *Destination* to match.
+- No `/fixposition/camera/*` topics at all → `camera.enabled` is `false`, or the driver
+  isn't running (topics only exist while it runs).
+- Multicast (the sensor's default) often doesn't reach the host through switches doing
+  IGMP snooping — prefer `Unicast`.
 
 ## Documentation
 
