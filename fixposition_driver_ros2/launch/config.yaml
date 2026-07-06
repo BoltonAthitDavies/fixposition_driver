@@ -70,3 +70,14 @@
         speed_topic: "/fixposition/speed"        # Wheelspeed input, empty to disable
         corr_topic:  "/rtcm"                     # Correction data input, empty to disable
         qos_type:    "sensor_short"              # "sensor_short", "sensor_long", "default_short", "default_long"
+
+        # Camera video stream (H.264/RTP received over UDP, separate from the sensor data "stream" above).
+        # The sensor must be configured to stream the camera to THIS host: web UI -> Configuration -> Camera ->
+        # Stream: Enable, Encoding H.264, Method Unicast, Destination <this-host-ip>:<port>. The host needs the
+        # GStreamer H.264 decoder: sudo apt install gstreamer1.0-libav gstreamer1.0-plugins-bad
+        # Publishes <output_ns>/camera/image_raw (sensor_msgs/Image) and .../image_raw/compressed (JPEG).
+        camera:
+            enabled:  true             # Enable the camera image topics
+            port:     5004             # UDP port the sensor unicasts the H.264 stream to
+            frame_id: "FP_CAM"         # frame_id stamped on the published images
+            pipeline: ""               # Optional full GStreamer pipeline override (empty = built from port)

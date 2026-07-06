@@ -56,6 +56,12 @@ struct DriverParams {
     std::string corr_topic_;
     std::string qos_type_;
 
+    // Camera video stream (H.264/RTP over UDP), see launch/config.yaml
+    bool camera_enabled_ = false;
+    int camera_port_ = 5004;
+    std::string camera_pipeline_;              //!< Optional full GStreamer pipeline override (empty = build from port)
+    std::string camera_frame_id_ = "FP_CAM";  //!< frame_id for published images
+
     // Check if entry is in messges_
     bool MessageEnabled(const std::string& message_name) const;
 };

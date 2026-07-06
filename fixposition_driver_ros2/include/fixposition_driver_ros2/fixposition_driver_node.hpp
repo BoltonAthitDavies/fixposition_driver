@@ -23,6 +23,7 @@
 #include <fpsdk_ros2/ext/rclcpp.hpp>
 
 /* PACKAGE */
+#include "camera.hpp"
 #include "data_to_ros2.hpp"
 #include "params.hpp"
 #include "ros2_msgs.hpp"
@@ -131,6 +132,9 @@ class FixpositionDriverNode {
     // TF broadcasters
     std::unique_ptr<tf2_ros::TransformBroadcaster> tf_br_;
     std::unique_ptr<tf2_ros::StaticTransformBroadcaster> static_br_;
+
+    // Camera video stream publisher (optional)
+    std::unique_ptr<CameraPublisher> camera_;
 
     // State
     JumpDetector jump_detector_;

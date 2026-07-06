@@ -28,6 +28,8 @@ find_package(rtcm_msgs REQUIRED)
 find_package(fpsdk_common REQUIRED)
 find_package(fpsdk_ros2 REQUIRED)
 find_package(rosbag2_cpp REQUIRED)
+find_package(OpenCV REQUIRED)
+find_package(cv_bridge REQUIRED)
 
 include_directories(
   include
@@ -38,6 +40,7 @@ include_directories(
   ${EIGEN3_INCLUDE_DIR}
   ${Boost_INCLUDE_DIR}
   ${fpsdk_common_INLCUDE_DIRS} ${fpsdk_ros2_INLCUDE_DIRS}
+  ${OpenCV_INCLUDE_DIRS}
 )
 
 add_executable(
@@ -45,6 +48,7 @@ add_executable(
   src/fixposition_driver_node.cpp
   src/params.cpp
   src/data_to_ros2.cpp
+  src/camera.cpp
 )
 
 target_link_libraries(
@@ -55,6 +59,7 @@ target_link_libraries(
   ${EIGEN3_LIBRARIES}
   ${fpsdk_common_LIBRARIES} ${fpsdk_ros2_LIBRARIES}
   ${rosbag2_cpp_TARGETS}
+  ${OpenCV_LIBS}
   pthread
 )
 
@@ -75,7 +80,8 @@ install(DIRECTORY
 )
 ament_target_dependencies(${PROJECT_NAME}_exec
     rclcpp std_msgs nav_msgs geometry_msgs sensor_msgs tf2_ros tf2_eigen
-    fixposition_driver_lib fixposition_driver_msgs rtcm_msgs tf2_geometry_msgs)
+    fixposition_driver_lib fixposition_driver_msgs rtcm_msgs tf2_geometry_msgs
+    cv_bridge OpenCV)
 
 # define ament package for this project
 ament_package()

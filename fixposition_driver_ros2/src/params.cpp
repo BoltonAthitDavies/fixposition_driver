@@ -47,6 +47,10 @@ bool LoadParamsFromRos2(std::shared_ptr<rclcpp::Node>& nh, DriverParams& params)
     const std::string SPEED_TOPIC = "speed_topic";
     const std::string CORR_TOPIC = "corr_topic";
     const std::string QOS_TYPE = "qos_type";
+    const std::string CAMERA_ENABLED = "camera.enabled";
+    const std::string CAMERA_PORT = "camera.port";
+    const std::string CAMERA_PIPELINE = "camera.pipeline";
+    const std::string CAMERA_FRAME_ID = "camera.frame_id";
 
     std::string topic_type_string_;
     nh->declare_parameter(STREAM, params.stream_);
@@ -69,6 +73,10 @@ bool LoadParamsFromRos2(std::shared_ptr<rclcpp::Node>& nh, DriverParams& params)
     nh->declare_parameter(SPEED_TOPIC, params.speed_topic_);
     nh->declare_parameter(CORR_TOPIC, params.corr_topic_);
     nh->declare_parameter(QOS_TYPE, params.qos_type_);
+    nh->declare_parameter(CAMERA_ENABLED, params.camera_enabled_);
+    nh->declare_parameter(CAMERA_PORT, params.camera_port_);
+    nh->declare_parameter(CAMERA_PIPELINE, params.camera_pipeline_);
+    nh->declare_parameter(CAMERA_FRAME_ID, params.camera_frame_id_);
 
     if (!nh->get_parameter(STREAM, params.stream_) || params.stream_.empty()) {
         RCLCPP_WARN(logger, "Failed loading %s param", STREAM.c_str());
@@ -166,6 +174,22 @@ bool LoadParamsFromRos2(std::shared_ptr<rclcpp::Node>& nh, DriverParams& params)
         RCLCPP_WARN(logger, "Failed loading %s param", QOS_TYPE.c_str());
         ok = false;
     }
+    if (!nh->get_parameter(CAMERA_ENABLED, params.camera_enabled_)) {
+        RCLCPP_WARN(logger, "Failed loading %s param", CAMERA_ENABLED.c_str());
+        ok = false;
+    }
+    if (!nh->get_parameter(CAMERA_PORT, params.camera_port_)) {
+        RCLCPP_WARN(logger, "Failed loading %s param", CAMERA_PORT.c_str());
+        ok = false;
+    }
+    if (!nh->get_parameter(CAMERA_PIPELINE, params.camera_pipeline_)) {
+        RCLCPP_WARN(logger, "Failed loading %s param", CAMERA_PIPELINE.c_str());
+        ok = false;
+    }
+    if (!nh->get_parameter(CAMERA_FRAME_ID, params.camera_frame_id_)) {
+        RCLCPP_WARN(logger, "Failed loading %s param", CAMERA_FRAME_ID.c_str());
+        ok = false;
+    }
 
     RCLCPP_INFO(logger, "DriverParams: stream=%s", params.stream_.c_str());
     RCLCPP_INFO(logger, "DriverParams: reconnect_delay=%.1f", params.reconnect_delay_);
@@ -189,6 +213,10 @@ bool LoadParamsFromRos2(std::shared_ptr<rclcpp::Node>& nh, DriverParams& params)
     RCLCPP_INFO(logger, "DriverParams: speed_topic=%s", params.speed_topic_.c_str());
     RCLCPP_INFO(logger, "DriverParams: corr_topic=%s", params.corr_topic_.c_str());
     RCLCPP_INFO(logger, "DriverParams: qos_type=%s", params.qos_type_.c_str());
+    RCLCPP_INFO(logger, "DriverParams: camera_enabled=%s", params.camera_enabled_ ? "true" : "false");
+    RCLCPP_INFO(logger, "DriverParams: camera_port=%d", params.camera_port_);
+    RCLCPP_INFO(logger, "DriverParams: camera_pipeline=%s", params.camera_pipeline_.c_str());
+    RCLCPP_INFO(logger, "DriverParams: camera_frame_id=%s", params.camera_frame_id_.c_str());
 
     return ok;
 }

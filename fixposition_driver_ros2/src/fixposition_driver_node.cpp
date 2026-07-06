@@ -435,6 +435,14 @@ bool FixpositionDriverNode::StartNode() {
         _PUB(datum_pub_, sensor_msgs::msg::NavSatFix, output_ns + "/datum", qos_settings_);
     }
 
+    // Camera video stream (received separately over UDP, not through the sensor data stream)
+    if (params_.camera_enabled_) {
+        camera_ = std::make_unique<CameraPublisher>(nh_, params_, output_ns, qos_settings_);
+        if (!camera_->Start()) {
+            RCLCPP_WARN(logger_, "Failed starting camera stream");
+        }
+    }
+
     // Subscribe to correction data input
     if (!params_.corr_topic_.empty()) {
         _SUB(corr_sub_, rtcm_msgs::msg::Message, params_.corr_topic_, 100, [this](const rtcm_msgs::msg::Message& msg) {
@@ -486,6 +494,12 @@ bool FixpositionDriverNode::StartNode() {
 
 void FixpositionDriverNode::StopNode() {
     RCLCPP_INFO(logger_, "Stopping...");
+
+    // Stop camera stream (joins its worker thread)
+    if (camera_) {
+        camera_->Stop();
+        camera_.reset();
+    }
 
     driver_.RemoveFpaObservers();
     driver_.RemoveNmeaObservers();
