@@ -250,7 +250,7 @@ ros2 run plotjuggler plotjuggler
 ## Recording a Bag
 
 ```bash
-ros2 bag record -o fixposition_bag \
+ros2 bag record -o fixposition_bag_wgv_003 \
   /tf /tf_static \
   /fixposition/fpa/corrimu /fixposition/fpa/eoe /fixposition/fpa/gnssant \
   /fixposition/fpa/gnsscorr /fixposition/fpa/imubias /fixposition/fpa/llh \
@@ -260,11 +260,49 @@ ros2 bag record -o fixposition_bag \
   /fixposition/imu_ypr /fixposition/nmea /fixposition/odometry_ecef \
   /fixposition/odometry_enu /fixposition/odometry_enu_smooth \
   /fixposition/odometry_llh /fixposition/odometry_smooth \
-  /fixposition/poiimu /fixposition/speed /fixposition/ypr /rtcm
+  /fixposition/poiimu /fixposition/speed /fixposition/ypr /rtcm /fixposition/camera/image_raw
 ```
 
 The camera topics are omitted above (they are large). To include video, add
 `/fixposition/camera/image_raw/compressed` (JPEG — much smaller than raw).
+
+## Analysis & Plotting
+
+[analysis/plot_fixposition.py](analysis/plot_fixposition.py) reproduces the
+PlotJuggler tabs with matplotlib, reading from **either** a ros2 bag (directory
+with `metadata.yaml`, or a `.mcap`/`.db3` file) or a CSV log dir produced by
+[analysis/log_fixposition.py](analysis/log_fixposition.py). With `--save` it
+writes the figures as PNGs into the source directory:
+
+```bash
+source /opt/ros/humble/setup.bash        # rosbag2_py needed to read a bag
+source install/setup.bash
+python3 analysis/plot_fixposition.py fixposition_bag_01 --save
+```
+
+This produces `imu.png`, `gnss.png`, `odom.png`, and `path_xy.png` inside
+`fixposition_bag_01/` (the PNGs already committed under `fixposition_bag_01/`
+and `fixposition_bag_02/` were generated this way). See
+[analysis/README.md](analysis/README.md) for the full logging + plotting
+pipeline.
+
+### How `path_xy.png` is plotted
+
+`path_xy.png` is the top-down X/Y trajectory. The script:
+
+1. **Reads the bag** with `rosbag2_py.SequentialReader`, deserializing each
+   message and keeping the four Fixposition topics (`poiimu`, `odometry_llh`,
+   `odometry_ecef`, `odometry_enu`). Timestamps are shifted to a common
+   relative start; quaternions are converted to roll/pitch/yaw.
+2. **Picks the path frame:** it prefers `/fixposition/odometry_enu` (a local
+   East/North frame in meters, plotted directly). If the bag has no ENU samples
+   — ENU only publishes once fusion/GNSS establishes the origin — it falls back
+   to `/fixposition/odometry_ecef` re-centered on its first sample (same shape,
+   axes not true E/N, noted in the title).
+3. **Draws the figure:** points are scattered and **colored by elapsed time**
+   (viridis colorbar), joined by a faint gray line, with a green **start**
+   marker and a red **X end** marker, at equal aspect ratio.
+4. **Saves** it as `path_xy.png` (dpi 120) in the bag directory.
 
 ## Troubleshooting
 
