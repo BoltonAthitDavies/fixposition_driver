@@ -33,10 +33,10 @@ rviz2 -d ~/fixposition_driver/fixposition.rviz
 export ROS_DISCOVERY_SERVER=192.168.0.146:11811
 
 # record rosbag
-ros2 bag record -o fixposition_bag_02   /tf /tf_static   /fixposition/fpa/corrimu /fixposition/fpa/eoe /fixposition/fpa/gnssant   /fixposition/fpa/gnsscorr /fixposition/fpa/imubias /fixposition/fpa/llh   /fixposition/fpa/odomenu /fixposition/fpa/odometry /fixposition/fpa/odomsh   /fixposition/fpa/odomstatus /fixposition/fpa/rawimu /fixposition/fpa/text   /fixposition/fpa/tp /fixposition/fusion /fixposition/gnss1 /fixposition/gnss2   /fixposition/imu_ypr /fixposition/nmea /fixposition/nmea/gga /fixposition/nmea/gll   /fixposition/nmea/gsa /fixposition/nmea/gst /fixposition/nmea/gsv /fixposition/nmea/hdt   /fixposition/nmea/rmc /fixposition/nmea/vtg /fixposition/nmea/zda   /fixposition/novb/inspvax /fixposition/odometry_ecef /fixposition/odometry_enu   /fixposition/odometry_enu_smooth /fixposition/odometry_llh /fixposition/odometry_smooth   /fixposition/poiimu /fixposition/speed /fixposition/ypr /rtcm
+ros2 bag record -o fixposition_bag_wgv_004   /tf /tf_static   /fixposition/fpa/corrimu /fixposition/fpa/eoe /fixposition/fpa/gnssant   /fixposition/fpa/gnsscorr /fixposition/fpa/imubias /fixposition/fpa/llh   /fixposition/fpa/odomenu /fixposition/fpa/odometry /fixposition/fpa/odomsh   /fixposition/fpa/odomstatus /fixposition/fpa/rawimu /fixposition/fpa/text   /fixposition/fpa/tp /fixposition/fusion /fixposition/gnss1 /fixposition/gnss2   /fixposition/imu_ypr /fixposition/nmea /fixposition/nmea/gga /fixposition/nmea/gll   /fixposition/nmea/gsa /fixposition/nmea/gst /fixposition/nmea/gsv /fixposition/nmea/hdt   /fixposition/nmea/rmc /fixposition/nmea/vtg /fixposition/nmea/zda   /fixposition/novb/inspvax /fixposition/odometry_ecef /fixposition/odometry_enu   /fixposition/odometry_enu_smooth /fixposition/odometry_llh /fixposition/odometry_smooth   /fixposition/poiimu /fixposition/speed /fixposition/ypr /rtcm
 
 # play rosbag
-ros2 bag play fixposition_bag/ --clock
+ros2 bag play fixposition_bag_wgv_002 --clock
 
 <------------------------ Network command ------------------------>
 # ip connection list
