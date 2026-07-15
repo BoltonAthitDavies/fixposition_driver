@@ -250,7 +250,7 @@ ros2 run plotjuggler plotjuggler
 ## Recording a Bag
 
 ```bash
-ros2 bag record -o fixposition_bag_wgv_004 \
+ros2 bag record -o fixposition_bag \
   /tf /tf_static \
   /fixposition/fpa/corrimu /fixposition/fpa/eoe /fixposition/fpa/gnssant \
   /fixposition/fpa/gnsscorr /fixposition/fpa/imubias /fixposition/fpa/llh \
@@ -260,11 +260,12 @@ ros2 bag record -o fixposition_bag_wgv_004 \
   /fixposition/imu_ypr /fixposition/nmea /fixposition/odometry_ecef \
   /fixposition/odometry_enu /fixposition/odometry_enu_smooth \
   /fixposition/odometry_llh /fixposition/odometry_smooth \
-  /fixposition/poiimu /fixposition/speed /fixposition/ypr /rtcm /fixposition/camera/image_raw
+  /fixposition/poiimu /fixposition/speed /fixposition/ypr /rtcm \
+  /ins/imu /ins/imu_bias /ins/lever_arm /ins/nav_sat_fix \
+  /ins/nav_sat_ref /ins/ncom /ins/odometry /ins/path
 ```
 
-The camera topics are omitted above (they are large). To include video, add
-`/fixposition/camera/image_raw/compressed` (JPEG — much smaller than raw).
+The `/ins/*` topics are from the Xsens Vision Navigator (if running alongside). To include camera video, add `/fixposition/camera/image_raw/compressed` (JPEG — much smaller than raw).
 
 ## Datasets
 

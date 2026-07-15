@@ -1,209 +1,209 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <root>
- <tabbed_widget parent="main_window" name="Main Window">
-  <Tab tab_name="imu" containers="1">
+ <tabbed_widget name="Main Window" parent="main_window">
+  <Tab containers="1" tab_name="imu">
    <Container>
-    <DockSplitter sizes="0.333707;0.332587;0.333707" count="3" orientation="-">
-     <DockSplitter sizes="0.332889;0.334223;0.332889" count="3" orientation="|">
+    <DockSplitter count="3" sizes="0.333707;0.332587;0.333707" orientation="-">
+     <DockSplitter count="3" sizes="0.332889;0.334223;0.332889" orientation="|">
       <DockArea name="...">
-       <plot flip_x="false" mode="TimeSeries" flip_y="false" line_width="1.0">
-        <range right="9.829777" top="0.000716" left="4.927436" bottom="-0.000806"/>
+       <plot flip_x="false" line_width="1.0" flip_y="false" mode="TimeSeries">
+        <range top="0.000840" left="2.119944" bottom="-0.001250" right="7.006052"/>
         <limitY/>
-        <curve name="/fixposition/poiimu/angular_velocity/x" color="#1f77b4"/>
+        <curve color="#1f77b4" name="/fixposition/poiimu/angular_velocity/x"/>
        </plot>
       </DockArea>
       <DockArea name="...">
-       <plot flip_x="false" mode="TimeSeries" flip_y="false" line_width="1.0">
-        <range right="9.829777" top="0.001138" left="4.927436" bottom="-0.000888"/>
+       <plot flip_x="false" line_width="1.0" flip_y="false" mode="TimeSeries">
+        <range top="0.001278" left="2.119944" bottom="-0.001179" right="7.006052"/>
         <limitY/>
-        <curve name="/fixposition/poiimu/angular_velocity/y" color="#d62728"/>
+        <curve color="#d62728" name="/fixposition/poiimu/angular_velocity/y"/>
        </plot>
       </DockArea>
       <DockArea name="...">
-       <plot flip_x="false" mode="TimeSeries" flip_y="false" line_width="1.0">
-        <range right="9.829777" top="0.000984" left="4.927436" bottom="-0.000854"/>
+       <plot flip_x="false" line_width="1.0" flip_y="false" mode="TimeSeries">
+        <range top="0.000960" left="2.119944" bottom="-0.000710" right="7.006052"/>
         <limitY/>
-        <curve name="/fixposition/poiimu/angular_velocity/z" color="#1ac938"/>
-       </plot>
-      </DockArea>
-     </DockSplitter>
-     <DockSplitter sizes="0.332221;0.335557;0.332221" count="3" orientation="|">
-      <DockArea name="...">
-       <plot flip_x="false" mode="TimeSeries" flip_y="false" line_width="1.0">
-        <range right="9.829777" top="0.594398" left="4.927436" bottom="0.560902"/>
-        <limitY/>
-        <curve name="/fixposition/poiimu/linear_acceleration/x" color="#ff7f0e"/>
-       </plot>
-      </DockArea>
-      <DockArea name="...">
-       <plot flip_x="false" mode="TimeSeries" flip_y="false" line_width="1.0">
-        <range right="9.829777" top="0.071008" left="4.927436" bottom="0.045493"/>
-        <limitY/>
-        <curve name="/fixposition/poiimu/linear_acceleration/y" color="#9467bd"/>
-       </plot>
-      </DockArea>
-      <DockArea name="...">
-       <plot flip_x="false" mode="TimeSeries" flip_y="false" line_width="1.0">
-        <range right="9.829777" top="9.818150" left="4.927436" bottom="9.778250"/>
-        <limitY/>
-        <curve name="/fixposition/poiimu/linear_acceleration/z" color="#f14cc1"/>
+        <curve color="#1ac938" name="/fixposition/poiimu/angular_velocity/z"/>
        </plot>
       </DockArea>
      </DockSplitter>
-     <DockSplitter sizes="0.332221;0.335557;0.332221" count="3" orientation="|">
+     <DockSplitter count="3" sizes="0.332221;0.335557;0.332221" orientation="|">
       <DockArea name="...">
-       <plot flip_x="false" mode="TimeSeries" flip_y="false" line_width="1.0">
-        <range right="9.829777" top="0.100000" left="4.927436" bottom="-0.100000"/>
+       <plot flip_x="false" line_width="1.0" flip_y="false" mode="TimeSeries">
+        <range top="-0.154695" left="2.119944" bottom="-0.175905" right="7.006052"/>
         <limitY/>
-        <curve name="/fixposition/poiimu/orientation/roll" color="#17becf"/>
+        <curve color="#ff7f0e" name="/fixposition/poiimu/linear_acceleration/x"/>
        </plot>
       </DockArea>
       <DockArea name="...">
-       <plot flip_x="false" mode="TimeSeries" flip_y="false" line_width="1.0">
-        <range right="9.829777" top="0.100000" left="4.927436" bottom="-0.100000"/>
+       <plot flip_x="false" line_width="1.0" flip_y="false" mode="TimeSeries">
+        <range top="0.743352" left="2.119944" bottom="0.728548" right="7.006052"/>
         <limitY/>
-        <curve name="/fixposition/poiimu/orientation/pitch" color="#bcbd22"/>
+        <curve color="#9467bd" name="/fixposition/poiimu/linear_acceleration/y"/>
        </plot>
       </DockArea>
       <DockArea name="...">
-       <plot flip_x="false" mode="TimeSeries" flip_y="false" line_width="1.0">
-        <range right="9.829777" top="0.100000" left="4.927436" bottom="-0.100000"/>
+       <plot flip_x="false" line_width="1.0" flip_y="false" mode="TimeSeries">
+        <range top="9.795730" left="2.119944" bottom="9.760870" right="7.006052"/>
         <limitY/>
-        <curve name="/fixposition/poiimu/orientation/yaw" color="#1f77b4"/>
+        <curve color="#f14cc1" name="/fixposition/poiimu/linear_acceleration/z"/>
+       </plot>
+      </DockArea>
+     </DockSplitter>
+     <DockSplitter count="3" sizes="0.332221;0.335557;0.332221" orientation="|">
+      <DockArea name="...">
+       <plot flip_x="false" line_width="1.0" flip_y="false" mode="TimeSeries">
+        <range top="0.100000" left="2.119944" bottom="-0.100000" right="7.006052"/>
+        <limitY/>
+        <curve color="#17becf" name="/fixposition/poiimu/orientation/roll"/>
+       </plot>
+      </DockArea>
+      <DockArea name="...">
+       <plot flip_x="false" line_width="1.0" flip_y="false" mode="TimeSeries">
+        <range top="0.100000" left="2.119944" bottom="-0.100000" right="7.006052"/>
+        <limitY/>
+        <curve color="#bcbd22" name="/fixposition/poiimu/orientation/pitch"/>
+       </plot>
+      </DockArea>
+      <DockArea name="...">
+       <plot flip_x="false" line_width="1.0" flip_y="false" mode="TimeSeries">
+        <range top="0.100000" left="2.119944" bottom="-0.100000" right="7.006052"/>
+        <limitY/>
+        <curve color="#1f77b4" name="/fixposition/poiimu/orientation/yaw"/>
        </plot>
       </DockArea>
      </DockSplitter>
     </DockSplitter>
    </Container>
   </Tab>
-  <Tab tab_name="gnss" containers="1">
+  <Tab containers="1" tab_name="gnss">
    <Container>
-    <DockSplitter sizes="0.333707;0.332587;0.333707" count="3" orientation="-">
+    <DockSplitter count="3" sizes="0.333707;0.332587;0.333707" orientation="-">
      <DockArea name="...">
-      <plot flip_x="false" mode="TimeSeries" flip_y="false" line_width="1.0">
-       <range right="9.830009" top="13.763522" left="4.927404" bottom="13.763522"/>
+      <plot flip_x="false" line_width="1.0" flip_y="false" mode="TimeSeries">
+       <range top="13.763541" left="2.119921" bottom="13.763541" right="7.006027"/>
        <limitY/>
-       <curve name="/fixposition/odometry_llh/latitude" color="#d62728"/>
+       <curve color="#d62728" name="/fixposition/odometry_llh/latitude"/>
       </plot>
      </DockArea>
      <DockArea name="...">
-      <plot flip_x="false" mode="TimeSeries" flip_y="false" line_width="1.0">
-       <range right="9.830009" top="100.527905" left="4.927404" bottom="100.527905"/>
+      <plot flip_x="false" line_width="1.0" flip_y="false" mode="TimeSeries">
+       <range top="100.527921" left="2.119921" bottom="100.527921" right="7.006027"/>
        <limitY/>
-       <curve name="/fixposition/odometry_llh/longitude" color="#1ac938"/>
+       <curve color="#1ac938" name="/fixposition/odometry_llh/longitude"/>
       </plot>
      </DockArea>
      <DockArea name="...">
-      <plot flip_x="false" mode="TimeSeries" flip_y="false" line_width="1.0">
-       <range right="9.830009" top="-20.437405" left="4.927404" bottom="-20.438745"/>
+      <plot flip_x="false" line_width="1.0" flip_y="false" mode="TimeSeries">
+       <range top="-20.298345" left="2.119921" bottom="-20.303728" right="7.006027"/>
        <limitY/>
-       <curve name="/fixposition/odometry_llh/altitude" color="#ff7f0e"/>
+       <curve color="#ff7f0e" name="/fixposition/odometry_llh/altitude"/>
       </plot>
      </DockArea>
     </DockSplitter>
    </Container>
   </Tab>
-  <Tab tab_name="odom" containers="1">
+  <Tab containers="1" tab_name="odom">
    <Container>
-    <DockSplitter sizes="0.5;0.5" count="2" orientation="-">
-     <DockSplitter sizes="0.332889;0.334223;0.332889" count="3" orientation="|">
+    <DockSplitter count="2" sizes="0.5;0.5" orientation="-">
+     <DockSplitter count="3" sizes="0.332889;0.334223;0.332889" orientation="|">
       <DockArea name="...">
-       <plot flip_x="false" mode="TimeSeries" flip_y="false" line_width="1.0">
-        <range right="9.829961" top="-1132125.567108" left="4.927359" bottom="-1132125.570992"/>
+       <plot flip_x="false" line_width="1.0" flip_y="false" mode="TimeSeries">
+        <range top="-1132127.234247" left="2.119848" bottom="-1132127.236453" right="7.005946"/>
         <limitY/>
-        <curve name="/fixposition/odometry_ecef/pose/pose/position/x" color="#f14cc1"/>
+        <curve color="#f14cc1" name="/fixposition/odometry_ecef/pose/pose/position/x"/>
        </plot>
       </DockArea>
       <DockArea name="...">
-       <plot flip_x="false" mode="TimeSeries" flip_y="false" line_width="1.0">
-        <range right="9.829961" top="6091843.296312" left="4.927359" bottom="6091843.295788"/>
+       <plot flip_x="false" line_width="1.0" flip_y="false" mode="TimeSeries">
+        <range top="6091842.623540" left="2.119848" bottom="6091842.617660" right="7.005946"/>
         <limitY/>
-        <curve name="/fixposition/odometry_ecef/pose/pose/position/y" color="#9467bd"/>
+        <curve color="#9467bd" name="/fixposition/odometry_ecef/pose/pose/position/y"/>
        </plot>
       </DockArea>
       <DockArea name="...">
-       <plot flip_x="false" mode="TimeSeries" flip_y="false" line_width="1.0">
-        <range right="9.829961" top="1507577.632645" left="4.927359" bottom="1507577.630755"/>
+       <plot flip_x="false" line_width="1.0" flip_y="false" mode="TimeSeries">
+        <range top="1507579.679203" left="2.119848" bottom="1507579.674898" right="7.005946"/>
         <limitY/>
-        <curve name="/fixposition/odometry_ecef/pose/pose/position/z" color="#17becf"/>
+        <curve color="#17becf" name="/fixposition/odometry_ecef/pose/pose/position/z"/>
        </plot>
       </DockArea>
      </DockSplitter>
-     <DockSplitter sizes="0.332221;0.335557;0.332221" count="3" orientation="|">
+     <DockSplitter count="3" sizes="0.332221;0.335557;0.332221" orientation="|">
       <DockArea name="...">
-       <plot flip_x="false" mode="TimeSeries" flip_y="false" line_width="1.0">
-        <range right="9.829961" top="1.237902" left="4.927359" bottom="1.237413"/>
+       <plot flip_x="false" line_width="1.0" flip_y="false" mode="TimeSeries">
+        <range top="1.161148" left="2.119848" bottom="1.160000" right="7.005946"/>
         <limitY/>
-        <curve name="/fixposition/odometry_ecef/pose/pose/orientation/roll" color="#bcbd22"/>
+        <curve color="#bcbd22" name="/fixposition/odometry_ecef/pose/pose/orientation/roll"/>
        </plot>
       </DockArea>
       <DockArea name="...">
-       <plot flip_x="false" mode="TimeSeries" flip_y="false" line_width="1.0">
-        <range right="9.829961" top="-0.963920" left="4.927359" bottom="-0.964374"/>
+       <plot flip_x="false" line_width="1.0" flip_y="false" mode="TimeSeries">
+        <range top="-0.999586" left="2.119848" bottom="-1.000014" right="7.005946"/>
         <limitY/>
-        <curve name="/fixposition/odometry_ecef/pose/pose/orientation/pitch" color="#1f77b4"/>
+        <curve color="#1f77b4" name="/fixposition/odometry_ecef/pose/pose/orientation/pitch"/>
        </plot>
       </DockArea>
       <DockArea name="...">
-       <plot flip_x="false" mode="TimeSeries" flip_y="false" line_width="1.0">
-        <range right="9.829961" top="-2.709539" left="4.927359" bottom="-2.710667"/>
+       <plot flip_x="false" line_width="1.0" flip_y="false" mode="TimeSeries">
+        <range top="-2.531111" left="2.119848" bottom="-2.532479" right="7.005946"/>
         <limitY/>
-        <curve name="/fixposition/odometry_ecef/pose/pose/orientation/yaw" color="#d62728"/>
+        <curve color="#d62728" name="/fixposition/odometry_ecef/pose/pose/orientation/yaw"/>
        </plot>
       </DockArea>
      </DockSplitter>
     </DockSplitter>
    </Container>
   </Tab>
-  <Tab tab_name="odom_enu" containers="1">
+  <Tab containers="1" tab_name="odom_enu">
    <Container>
-    <DockSplitter sizes="1" count="1" orientation="-">
-     <DockSplitter sizes="0.333556;0.332889;0.333556" count="3" orientation="|">
-      <DockSplitter sizes="0.5;0.5" count="2" orientation="-">
+    <DockSplitter count="1" sizes="1" orientation="-">
+     <DockSplitter count="3" sizes="0.333556;0.332889;0.333556" orientation="|">
+      <DockSplitter count="2" sizes="0.5;0.5" orientation="-">
        <DockArea name="...">
-        <plot flip_x="false" mode="TimeSeries" flip_y="false" line_width="1.0">
-         <range right="9.830266" top="-0.095010" left="4.927957" bottom="-0.098790"/>
+        <plot flip_x="false" line_width="1.0" flip_y="false" mode="TimeSeries">
+         <range top="-0.005150" left="2.119886" bottom="-0.007250" right="7.005990"/>
          <limitY/>
-         <curve name="/fixposition/odometry_enu/pose/pose/position/x" color="#1f77b4"/>
+         <curve color="#1f77b4" name="/fixposition/odometry_enu/pose/pose/position/x"/>
         </plot>
        </DockArea>
        <DockArea name="...">
-        <plot flip_x="false" mode="TimeSeries" flip_y="false" line_width="1.0">
-         <range right="9.830266" top="0.005583" left="4.927957" bottom="0.004535"/>
+        <plot flip_x="false" line_width="1.0" flip_y="false" mode="TimeSeries">
+         <range top="0.075079" left="2.119886" bottom="0.074945" right="7.005990"/>
          <limitY/>
-         <curve name="/fixposition/odometry_enu/pose/pose/orientation/roll" color="#ff7f0e"/>
-        </plot>
-       </DockArea>
-      </DockSplitter>
-      <DockSplitter sizes="0.5;0.5" count="2" orientation="-">
-       <DockArea name="...">
-        <plot flip_x="false" mode="TimeSeries" flip_y="false" line_width="1.0">
-         <range right="9.830266" top="-0.333060" left="4.927957" bottom="-0.334740"/>
-         <limitY/>
-         <curve name="/fixposition/odometry_enu/pose/pose/position/y" color="#d62728"/>
-        </plot>
-       </DockArea>
-       <DockArea name="...">
-        <plot flip_x="false" mode="TimeSeries" flip_y="false" line_width="1.0">
-         <range right="9.830266" top="-0.059377" left="4.927957" bottom="-0.060087"/>
-         <limitY/>
-         <curve name="/fixposition/odometry_enu/pose/pose/orientation/pitch" color="#f14cc1"/>
+         <curve color="#ff7f0e" name="/fixposition/odometry_enu/pose/pose/orientation/roll"/>
         </plot>
        </DockArea>
       </DockSplitter>
-      <DockSplitter sizes="0.5;0.5" count="2" orientation="-">
+      <DockSplitter count="2" sizes="0.5;0.5" orientation="-">
        <DockArea name="...">
-        <plot flip_x="false" mode="TimeSeries" flip_y="false" line_width="1.0">
-         <range right="9.830266" top="0.304833" left="4.927957" bottom="0.303468"/>
+        <plot flip_x="false" line_width="1.0" flip_y="false" mode="TimeSeries">
+         <range top="0.021510" left="2.119886" bottom="0.016890" right="7.005990"/>
          <limitY/>
-         <curve name="/fixposition/odometry_enu/pose/pose/position/z" color="#1ac938"/>
+         <curve color="#d62728" name="/fixposition/odometry_enu/pose/pose/position/y"/>
         </plot>
        </DockArea>
        <DockArea name="...">
-        <plot flip_x="false" mode="TimeSeries" flip_y="false" line_width="1.0">
-         <range right="9.830266" top="0.984107" left="4.927957" bottom="0.983745"/>
+        <plot flip_x="false" line_width="1.0" flip_y="false" mode="TimeSeries">
+         <range top="0.017151" left="2.119886" bottom="0.016410" right="7.005990"/>
          <limitY/>
-         <curve name="/fixposition/odometry_enu/pose/pose/orientation/yaw" color="#9467bd"/>
+         <curve color="#f14cc1" name="/fixposition/odometry_enu/pose/pose/orientation/pitch"/>
+        </plot>
+       </DockArea>
+      </DockSplitter>
+      <DockSplitter count="2" sizes="0.5;0.5" orientation="-">
+       <DockArea name="...">
+        <plot flip_x="false" line_width="1.0" flip_y="false" mode="TimeSeries">
+         <range top="0.067727" left="2.119886" bottom="0.062372" right="7.005990"/>
+         <limitY/>
+         <curve color="#1ac938" name="/fixposition/odometry_enu/pose/pose/position/z"/>
+        </plot>
+       </DockArea>
+       <DockArea name="...">
+        <plot flip_x="false" line_width="1.0" flip_y="false" mode="TimeSeries">
+         <range top="1.056407" left="2.119886" bottom="1.056037" right="7.005990"/>
+         <limitY/>
+         <curve color="#9467bd" name="/fixposition/odometry_enu/pose/pose/orientation/yaw"/>
         </plot>
        </DockArea>
       </DockSplitter>
@@ -211,7 +211,61 @@
     </DockSplitter>
    </Container>
   </Tab>
-  <currentTabIndex index="3"/>
+  <Tab containers="1" tab_name="rt1003">
+   <Container>
+    <DockSplitter count="3" sizes="0.333707;0.332587;0.333707" orientation="-">
+     <DockSplitter count="2" sizes="0.5;0.5" orientation="|">
+      <DockArea name="...">
+       <plot flip_x="false" line_width="1.0" flip_y="false" mode="TimeSeries">
+        <range top="-38.239678" left="2.035564" bottom="-38.764009" right="7.006311"/>
+        <limitY/>
+        <curve color="#1f77b4" name="/ins/odometry/pose/pose/position/x"/>
+       </plot>
+      </DockArea>
+      <DockArea name="...">
+       <plot flip_x="false" line_width="1.0" flip_y="false" mode="TimeSeries">
+        <range top="3.062371" left="2.035564" bottom="3.062232" right="7.006311"/>
+        <limitY/>
+        <curve color="#ff7f0e" name="/ins/odometry/pose/pose/orientation/roll"/>
+       </plot>
+      </DockArea>
+     </DockSplitter>
+     <DockSplitter count="2" sizes="0.5;0.5" orientation="|">
+      <DockArea name="...">
+       <plot flip_x="false" line_width="1.0" flip_y="false" mode="TimeSeries">
+        <range top="-38.653269" left="2.035564" bottom="-39.199748" right="7.006311"/>
+        <limitY/>
+        <curve color="#d62728" name="/ins/odometry/pose/pose/position/y"/>
+       </plot>
+      </DockArea>
+      <DockArea name="...">
+       <plot flip_x="false" line_width="1.0" flip_y="false" mode="TimeSeries">
+        <range top="0.043595" left="2.035564" bottom="0.043401" right="7.006311"/>
+        <limitY/>
+        <curve color="#f14cc1" name="/ins/odometry/pose/pose/orientation/pitch"/>
+       </plot>
+      </DockArea>
+     </DockSplitter>
+     <DockSplitter count="2" sizes="0.5;0.5" orientation="|">
+      <DockArea name="...">
+       <plot flip_x="false" line_width="1.0" flip_y="false" mode="TimeSeries">
+        <range top="9.365442" left="2.035564" bottom="9.292173" right="7.006311"/>
+        <limitY/>
+        <curve color="#1ac938" name="/ins/odometry/pose/pose/position/z"/>
+       </plot>
+      </DockArea>
+      <DockArea name="...">
+       <plot flip_x="false" line_width="1.0" flip_y="false" mode="TimeSeries">
+        <range top="2.790929" left="2.035564" bottom="2.790284" right="7.006311"/>
+        <limitY/>
+        <curve color="#9467bd" name="/ins/odometry/pose/pose/orientation/yaw"/>
+       </plot>
+      </DockArea>
+     </DockSplitter>
+    </DockSplitter>
+   </Container>
+  </Tab>
+  <currentTabIndex index="4"/>
  </tabbed_widget>
  <use_relative_time_offset enabled="1"/>
  <!-- - - - - - - - - - - - - - - -->
@@ -236,7 +290,7 @@
    <max_array_size value="100"/>
    <boolean_strings_to_number value="true"/>
    <remove_suffix_from_strings value="true"/>
-   <selected_topics value="/fixposition/fpa/corrimu;/fixposition/fpa/eoe;/fixposition/fpa/gnssant;/fixposition/fpa/gnsscorr;/fixposition/fpa/imubias;/fixposition/fpa/llh;/fixposition/fpa/odomenu;/fixposition/fpa/odometry;/fixposition/fpa/odomsh;/fixposition/fpa/odomstatus;/fixposition/fpa/rawimu;/fixposition/fpa/text;/fixposition/fpa/tp;/fixposition/fusion;/fixposition/gnss1;/fixposition/gnss2;/fixposition/imu_ypr;/fixposition/nmea;/fixposition/nmea/gga;/fixposition/nmea/gll;/fixposition/nmea/gsa;/fixposition/nmea/gst;/fixposition/nmea/gsv;/fixposition/nmea/hdt;/fixposition/nmea/rmc;/fixposition/nmea/vtg;/fixposition/nmea/zda;/fixposition/novb/inspvax;/fixposition/odometry_ecef;/fixposition/odometry_enu;/fixposition/odometry_enu_smooth;/fixposition/odometry_llh;/fixposition/odometry_smooth;/fixposition/poiimu;/fixposition/speed;/fixposition/ypr;/parameter_events;/rosout;/rtcm;/tf;/tf_static"/>
+   <selected_topics value="/fixposition/fpa/corrimu;/fixposition/fpa/eoe;/fixposition/fpa/gnssant;/fixposition/fpa/gnsscorr;/fixposition/fpa/imubias;/fixposition/fpa/llh;/fixposition/fpa/odomenu;/fixposition/fpa/odometry;/fixposition/fpa/odomsh;/fixposition/fpa/odomstatus;/fixposition/fpa/rawimu;/fixposition/fpa/text;/fixposition/fpa/tp;/fixposition/fusion;/fixposition/gnss1;/fixposition/gnss2;/fixposition/imu_ypr;/fixposition/nmea;/fixposition/nmea/gga;/fixposition/nmea/gll;/fixposition/nmea/gsa;/fixposition/nmea/gst;/fixposition/nmea/gsv;/fixposition/nmea/hdt;/fixposition/nmea/rmc;/fixposition/nmea/vtg;/fixposition/nmea/zda;/fixposition/novb/inspvax;/fixposition/odometry_ecef;/fixposition/odometry_enu;/fixposition/odometry_enu_smooth;/fixposition/odometry_llh;/fixposition/odometry_smooth;/fixposition/poiimu;/fixposition/speed;/fixposition/ypr;/parameter_events;/rosout;/rtcm;/tf;/tf_static;/ins/imu;/ins/imu_bias;/ins/lever_arm;/ins/nav_sat_fix;/ins/nav_sat_ref;/ins/ncom;/ins/odometry;/ins/path"/>
   </plugin>
   <plugin ID="UDP Server"/>
   <plugin ID="WebSocket Server"/>
