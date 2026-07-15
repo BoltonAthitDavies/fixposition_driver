@@ -262,7 +262,8 @@ ros2 bag record -o fixposition_bag \
   /fixposition/odometry_llh /fixposition/odometry_smooth \
   /fixposition/poiimu /fixposition/speed /fixposition/ypr /rtcm \
   /ins/imu /ins/imu_bias /ins/lever_arm /ins/nav_sat_fix \
-  /ins/nav_sat_ref /ins/ncom /ins/odometry /ins/path
+  /ins/nav_sat_ref /ins/ncom /ins/odometry /ins/path \
+  /fixposition/camera/image_raw
 ```
 
 The `/ins/*` topics are from the Xsens Vision Navigator (if running alongside). To include camera video, add `/fixposition/camera/image_raw/compressed` (JPEG — much smaller than raw).
